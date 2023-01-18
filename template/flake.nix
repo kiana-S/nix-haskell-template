@@ -1,10 +1,14 @@
 {
   description = "A haskell executable";
 
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
   outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        overlays = [];
         pkgs = nixpkgs.legacyPackages.${system};
         
         # package/executable name
@@ -22,10 +26,8 @@
             withHoogle = false;
             overrides = self: super: with pkgs.haskell.lib; {
               # Use callCabal2nix to override Haskell dependencies here
-              # cf. https://tek.brick.do/K3VXJd8mEKO7
               # Example: 
               # > NanoID = self.callCabal2nix "NanoID" inputs.NanoID { };
-              # Assumes that you have the 'NanoID' flake input defined.
             };
             modifier = drv:
               pkgs.haskell.lib.addBuildTools drv (with hp; [
