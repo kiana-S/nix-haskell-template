@@ -37,11 +37,11 @@
       in
       {
         # Used by `nix build` & `nix run` (prod exe)
-        defaultPackage = project false;
+        packages.default = project false;
 
-        defaultApp = {
+        apps.default = {
           type = "app";
-          program = "${self.defaultPackage.${system}}/bin/${execName}";
+          program = "${self.packages.${system}.default}/bin/${execName}";
         };
 
         # Used by `nix develop` (dev shell)
